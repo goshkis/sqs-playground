@@ -14,3 +14,6 @@ Yes. Outline logging strategy though.
 
 Any preference on queue type?
 No. Standard is fine. (That means no strict ordering and "at-least-once" delivery guarantee)
+
+What time will it take to process one message? I need to estimate visibility parameter.
+Around 1s.
