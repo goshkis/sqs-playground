@@ -8,6 +8,6 @@ BATCH_SIZE = 10
 MAX_WAIT_TIME = 2
 
 # Extra logging for message reader
-LOG_DATA = True
+LOG_DATA = False
 
 READER_THREADS = 3
