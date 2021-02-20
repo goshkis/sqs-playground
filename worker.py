@@ -1,7 +1,9 @@
 """ Queue-processor
 """
 
+import time
 import random
+import threading
 import logging.config
 
 import config
@@ -45,16 +47,10 @@ def message_handler(message, extra_logging=False):
 
     return False if processing_result == "fail" else True
 
-def main():
-    """ Main routine
+def worker(queue, arg):
+    """ 
     """
-
-    queue = simpleSQSInterface(config.QUEUE_NAME)
-
-    logger.info("Processing messages for queue %s, batch size = %s",
-                config.QUEUE_NAME, config.BATCH_SIZE)
-
-    while True:
+    while not arg['stop']:
         received_messages = queue.receive_messages(config.BATCH_SIZE, config.MAX_WAIT_TIME)
         processed_messages = []
 
@@ -67,6 +63,36 @@ def main():
 
         if len(received_messages) > 0:
             logger.info("Messages received/processed: %s/%s", len(received_messages), len(processed_messages))
+
+def main():
+    """ Main routine
+    """
+
+    queue = simpleSQSInterface(config.QUEUE_NAME)
+
+    logger.info("Processing messages for queue %s, batch size = %s",
+                config.QUEUE_NAME, config.BATCH_SIZE)
+
+    info = {'stop': False}
+
+    threads = list()
+    for index in range(config.READER_THREADS):
+        logger.info("Starting thread %d.", index)
+        thread = threading.Thread(target=worker, args=(queue,info,))
+        threads.append(thread)
+        thread.start()
+
+    while True:
+        try:
+            logger.info('heartbeat')
+            time.sleep(5)
+        except KeyboardInterrupt:
+            info['stop'] = True
+            break
+
+    for index, thread in enumerate(threads):
+        thread.join()
+        logger.info("Thread %d done", index)
 
 if __name__ == "__main__":
     main()
