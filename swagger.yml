@@ -1,0 +1,34 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: Queue-writer
+consumes:
+  - application/json
+produces:
+  - application/json
+
+basePath: /api
+
+paths:
+  /message:
+    post:
+      operationId: message.create
+      summary: Sends message to the queue
+      parameters:
+        - name: message
+          in: body
+          description: Message to create
+          required: True
+          schema:
+            type: object
+            properties:
+              body:
+                type: string
+                description: Message body
+      responses:
+        201:
+          description: Message enqueued successfully
+        400:
+          description: Message enqueue failed due to missed parameter or malformed request
+        500:
+          description: Message enqueue failed due to service-side error
