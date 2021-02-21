@@ -1,6 +1,5 @@
 import sys
 import pytest
-
 from botocore.stub import Stubber
 from connexion import App
 

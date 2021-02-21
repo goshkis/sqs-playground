@@ -6,7 +6,6 @@
 from botocore.exceptions import ClientError
 from flask import make_response, abort
 from sqsinterface import simpleSQSInterface
-
 import config
 
 queue = simpleSQSInterface(config.QUEUE_NAME)

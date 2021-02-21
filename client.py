@@ -3,7 +3,6 @@ Trivial client to fill the queue with messages.
 """
 
 from time import sleep
-
 import requests
 
 TEXT="""

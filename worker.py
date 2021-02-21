@@ -5,11 +5,8 @@ import time
 import random
 import threading
 import logging.config
-
 from datetime import datetime
-
 import config
-
 from sqsinterface import simpleSQSInterface
 
 logging.config.fileConfig('log.conf')
