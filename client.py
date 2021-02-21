@@ -2,11 +2,11 @@
 Trivial client to fill the queue with messages.
 """
 
-import requests
-
 from time import sleep
 
-text="""
+import requests
+
+TEXT="""
 It's a mystery to me
 The game commences
 For the usual fee
@@ -35,14 +35,12 @@ Private investigations
 stats = {}
 
 while True:
-    for line in text.splitlines():
+    for line in TEXT.splitlines():
         payload = {'body': line}
         r = requests.post("http://127.0.0.1:5000/api/message", json=payload)
         if stats.get(r.status_code):
-            stats[r.status_code] += 1 
+            stats[r.status_code] += 1
         else:
             stats[r.status_code] = 1
     print(stats)
     sleep(1)
-
-    
