@@ -1,3 +1,8 @@
+"""
+SQS setup script.
+Creates standard queue and associated dead-letter queue.
+"""
+
 import sys
 import boto3
 from botocore.exceptions import ClientError
@@ -18,9 +23,9 @@ def setup_queue():
     redrive_policy = '{{"deadLetterTargetArn":"{}","maxReceiveCount":5}}'.format(dlq_queue.attributes['QueueArn'])
     
     attribs={
-        'VisibilityTimeout': '15',
-        'MaximumMessageSize': '2048',
-        'MessageRetentionPeriod': '900',
+        'VisibilityTimeout': config.VISIBILITY_TIMEOUT_S,
+        'MaximumMessageSize': config.MAX_MSG_SIZE_BYTES,
+        'MessageRetentionPeriod': config.RETENTION_PERIOD_S,
         'RedrivePolicy': redrive_policy
     }
     
