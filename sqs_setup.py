@@ -7,8 +7,8 @@ sqs_resource = boto3.resource('sqs') # Your default boto config must allow acces
 
 def setup_queue():
 
+    print("Setting-up DLQ: {}_dlq".format(config.QUEUE_NAME))
     try:
-        print("Setting-up DLQ: {}_dlq".format(config.QUEUE_NAME))
         dlq_queue = sqs_resource.create_queue(QueueName="{}_dlq".format(config.QUEUE_NAME))
     except ClientError as err:
         # import pdb;pdb.set_trace()
@@ -24,8 +24,8 @@ def setup_queue():
         'RedrivePolicy': redrive_policy
     }
     
+    print("Setting-up main queue: {}".format(config.QUEUE_NAME))
     try:
-        print("Setting-up main queue: {}".format(config.QUEUE_NAME))
         dlq_queue = sqs_resource.create_queue(QueueName="{}".format(config.QUEUE_NAME), Attributes=attribs)
     except ClientError as err:
         print("FATAL: can't create required queue(s): {}".format(err.response['Error']['Message']))
