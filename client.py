@@ -32,12 +32,16 @@ No compensation
 Private investigations
 """
 
-stats = {}
+stats = {'ConnErr':0}
 
 while True:
     for line in TEXT.splitlines():
         payload = {'body': line}
-        r = requests.post("http://127.0.0.1:5000/api/message", json=payload)
+        try:
+            r = requests.post("http://127.0.0.1:5000/api/message", json=payload)
+        except ConnectionError:
+            stats['ConnErr'] += 1
+
         if stats.get(r.status_code):
             stats[r.status_code] += 1
         else:
