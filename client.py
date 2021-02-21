@@ -2,7 +2,8 @@
 Trivial client to fill the queue with messages.
 """
 
-from time import sleep
+import sys
+from requests.exceptions import ConnectionError as ConnErr
 import requests
 
 TEXT="""
@@ -38,12 +39,13 @@ while True:
         payload = {'body': line}
         try:
             r = requests.post("http://127.0.0.1:5000/api/message", json=payload)
-        except ConnectionError:
+            if stats.get(r.status_code):
+                stats[r.status_code] += 1
+            else:
+                stats[r.status_code] = 1
+        except ConnErr:
             stats['ConnErr'] += 1
+        except KeyboardInterrupt:
+            sys.exit()
 
-        if stats.get(r.status_code):
-            stats[r.status_code] += 1
-        else:
-            stats[r.status_code] = 1
     print(stats)
-    sleep(1)
