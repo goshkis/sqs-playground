@@ -3,3 +3,4 @@
 temp.txt
 .vscode/*
 R/*
+*.log
