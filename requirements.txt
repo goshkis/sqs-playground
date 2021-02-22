@@ -46,9 +46,6 @@ s3transfer==0.3.4
 schemathesis==1.1.0
 six==1.15.0
 sortedcontainers==2.3.0
-swagger-codegen==0.1.30
-swagger-ui==0.1.2
-swagger-ui-bundle==0.0.8
 toml==0.10.2
 typer==0.1.1
 typing-extensions==3.7.4.3
