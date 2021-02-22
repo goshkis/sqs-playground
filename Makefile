@@ -1,12 +1,13 @@
 PYTHON = python3
+VENV = . .venv/bin/activate
 
 setup:
 	$(PYTHON) -m venv .venv
-	. .venv/bin/activate; pip3 install -r requirements.txt
-	. .venv/bin/activate; ${PYTHON} ./sqs_setup.py
+	$(VENV); pip3 install -r requirements.txt
+	$(VENV); ${PYTHON} ./sqs_setup.py
 
 run:
-	./runall.sh
+	$(VENV); ./runall.sh
 
 test:
 	${PYTHON} -m pytest tests/

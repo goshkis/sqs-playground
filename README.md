@@ -12,14 +12,15 @@ Setup instructions assume you have everything installed.
 1. Make sure you have boto3 installed and configured. The user must have enough rights to create SQS queues. See instructions [here](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/configuration.html)
 2. Clone this project
 3. `make setup` will create python virtual environment, install dependencies, and setup SQS queues.
-4. From within the project directory, activate virtualenv by executing `. .venv/bin/activate`
-5. `make run` to launch service and the test client
+4. `make run` to launch service and the test client
 
 ![running service](docs/runall.png "Running service screen")
 
 Three panes from left to right: HTTP service logs, queue-reader stats, and test client stats.
 
 **Note**: The client purposefully sends one malformed request per batch (see 400s counter). Moreover, message processor purposefully configured to fail in ~10% of cases for illustration and testing purposes (see discrepancy in received/processed messages).
+
+To run components separately don't forget to activate virtualenv by executing `. .venv/bin/activate`
 
 To run tests execute `make test`
 
