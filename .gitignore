@@ -3,3 +3,5 @@
 temp.txt
 .vscode/*
 *.log
+R/sqs_files/*
+R/*.tex
