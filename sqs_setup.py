@@ -23,9 +23,9 @@ def setup_queue():
     redrive_policy = '{{"deadLetterTargetArn":"{}","maxReceiveCount":5}}'.format(dlq_queue.attributes['QueueArn'])
     
     attribs={
-        'VisibilityTimeout': config.VISIBILITY_TIMEOUT_S,
-        'MaximumMessageSize': config.MAX_MSG_SIZE_BYTES,
-        'MessageRetentionPeriod': config.RETENTION_PERIOD_S,
+        'VisibilityTimeout': str(config.VISIBILITY_TIMEOUT_S),
+        'MaximumMessageSize': str(config.MAX_MSG_SIZE_BYTES),
+        'MessageRetentionPeriod': str(config.RETENTION_PERIOD_S),
         'RedrivePolicy': redrive_policy
     }
     
