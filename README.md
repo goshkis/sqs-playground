@@ -18,11 +18,14 @@ Setup instructions assume you have everything installed.
 
 Three panes from left to right: HTTP service logs, queue-reader stats, and test client stats.
 
-**Note**: The client purposefully sends one malformed request per batch (see 400s counter). Moreover, message processor purposefully configured to fail in ~10% of cases for illustration and testing purposes (see discrepancy in received/processed messages).
+**Important note**: The client purposefully sends one malformed request per batch (see 400s counter). Moreover, message processor purposefully configured to fail in ~10% of cases for illustration and testing purposes (see discrepancy in received/processed messages). Message processing quality can be quickly illustrated by following graph (see R directory for quick and dirty analysis example)
+
+![processing quality](docs/processing_quality.png "Processing qulaity")
 
 To run components separately don't forget to activate virtualenv by executing `. .venv/bin/activate`
 
 To run tests execute `make test`
+
 
 ## Files
 

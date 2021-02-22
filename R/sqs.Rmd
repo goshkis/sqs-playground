@@ -1,0 +1,71 @@
+---
+title: "Quick analisys of implemented message processing"
+output:
+  pdf_document:
+    keep_tex: yes
+  word_document: default
+  html_document:
+    df_print: paged
+date: "`r format(Sys.time(), '%d %b %Y')`"
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = FALSE,tidy.opts=list(width.cutoff=60),tidy=TRUE)
+library(scales)
+library(knitr)
+#library(kableExtra)
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(anytime)
+
+dst_tz = "America/Los_Angeles"
+infile <- "reader_data.log"
+
+nicetable <- function(data, caption="") {
+  knitr::kable(data, booktabs = T, longtable = T, escape = T, caption = caption) %>% kable_styling(latex_options = c("striped","hold_position","repeat_header"))
+}
+
+### Loading and preparing data 
+# log_ts,sent_ts,result,recv_count,sender_id,message_id,message_body
+# 1613858267385,1613857551662,pass,3,AIDASSLDOJFLAIXMBIS7L,c3d2f07b-aef9-487a-a1a6-161c94931b9d,"There's always an excuse for it"
+tmp <- read.delim(infile, header=T, sep=",", colClasses=c("double","double","factor","integer","factor","factor","character"))
+tmp <- tmp %>% mutate(log_ts_hr=anytime(log_ts/1000, asUTC = T), sent_ts_hr=anytime(sent_ts/1000, asUTC = T))
+tmp <- tmp %>% mutate(message_age=(log_ts-sent_ts)/1000)
+
+```
+This is an example of quick analysis that can be made based on logs. Goal is to evaluate processing quality and come up with recommendations on what to look at for determining reasons for bad quality cases. This is something we typically not getting from traditional ops graphs.
+
+Data set includes records for times between `r min(tmp$log_ts_hr)` and `r max(tmp$log_ts_hr)`
+
+Processing quality in one graph: messages age in the queue. Using this graph we can say/find:
+
+- Seems like we had an event that resulted in big spike in the number of messages in the queue.
+- Slope is characterizing rate of incoming messages during the event.
+- Visibility timeout for the queue is also visible here (time between spikes) and we can have some ideas around tuning it.
+- It's possible that some messages were sent to dead-letter queue - at least some made it to 5 processing attempts.
+- Our processing keep failing even after the event - second horizontal line from the bottom.
+
+```{r }
+tmp %>% mutate(ddate=floor_date(log_ts_hr, "1 second")) %>% ggplot(aes(x=ddate, y=message_age, color=recv_count)) + geom_point(size=1, alpha = 0.2) + theme_bw()
+```
+\pagebreak
+
+Count of processed messages by minute
+
+```{r }
+#tmp %>% mutate(ddate=floor_date(start_time_hr, "1 hour")) %>% group_by(ddate) %>% summarise(n = n_distinct(vnic_id)) %>% ggplot(aes(x=ddate, y=n)) + geom_line() + theme_bw()
+
+tmp %>% mutate(ddate=floor_date(log_ts_hr, "1 second")) %>% group_by(ddate) %>% count() %>% ggplot(aes(x=ddate, y=n)) + geom_line() + theme_bw()
+```
+\pagebreak
+
+For further analysis we're limiting number of messages to trace by working with small amount of messages from outliers.
+Graphing message age, grouping by 30 seconds of processing timestamps.
+
+```{r }
+tmp %>% mutate(ddate=floor_date(log_ts_hr, "30 seconds")) %>% ggplot(aes(x=ddate, y=message_age)) + geom_boxplot(aes(group=ddate)) + theme_bw()
+```
+
+
