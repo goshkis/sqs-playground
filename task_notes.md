@@ -68,7 +68,8 @@ While it's clear that this is just a test assignment, I think it's worth mention
     1. Nail the basics: ensure base systems are not sources of pain to devs (regular build or test failures due to issues with these systems, etc).
     2. Unit plus functional tests suitable for dev environments (resource and exec time constrains)
     3. Commit-triggered tests. Can take longer, and more resources. Could be e2e with load from traffic generators (comparative perf or resource consumption data).
-    4. Tack and bubble up quality metrics. Quality metrics should be easily available. Things like deployment success ratio per service should not require one engineering day to obtain. 
+    4. Canaries executing public APIs
+    5. Tack and bubble up quality metrics. Quality metrics should be easily available. Things like deployment success ratio per service should not require one engineering day to obtain.
 2. Play with evil carefully
     1. Pre-prod integration environment. Dogfood program, duplicating life traffic to this environment, etc to ensure enough pain is being received. Remember: more or longer tests is not necessary leads to a better quality or customer satisfaction. 
     2. Auto-deploy strategy with aim to provide feedback as fast as possible.
