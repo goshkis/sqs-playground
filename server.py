@@ -8,7 +8,7 @@ import connexion
 from flask import render_template
 
 app = connexion.App(__name__, specification_dir="./")
-app.add_api("swagger.yml")
+app.add_api("swagger.yml", options={"swagger_ui": False})
 
 
 @app.route("/")
@@ -20,4 +20,4 @@ def home():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=False)
