@@ -33,6 +33,10 @@ Yes, we can.
 
 Around 0.1s.
 
+> Who is a client for this API, external users or some internal server?
+
+External users
+
 > Will the endpoint be frontended by proxy/API Gateway? This way I'll not think about, say, error code masking, or other typical actions.
 
 Yes. But include something to give an idea of what you expect from this layer. 
