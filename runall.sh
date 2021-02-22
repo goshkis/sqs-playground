@@ -5,6 +5,8 @@ SESS=egorsqs
 tmux new-session -d -s $SESS
 BASE=$(tmux display-message -p "#{base-index}")
 BASEP=$(tmux display-message -p "#{pane-base-index}")
+[[ $BASE ]] || BASE=0
+[[ $BASEP ]] || BASEP=0
 tmux split-window -h
 tmux split-window -h
 tmux select-layout even-horizontal
