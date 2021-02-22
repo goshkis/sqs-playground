@@ -1,7 +1,5 @@
 PYTHON = python3
 
-all: setup
-
 setup:
 	$(PYTHON) -m venv .venv
 	. .venv/bin/activate; pip3 install -r requirements.txt
@@ -14,4 +12,4 @@ test:
 	${PYTHON} -m pytest tests/
 
 
-.PHONY: setup test run activate
+.PHONY: setup test run
