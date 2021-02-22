@@ -10,7 +10,7 @@ run:
 	$(VENV); ./runall.sh
 
 test:
-	${PYTHON} -m pytest tests/
+	$(VENV); ${PYTHON} -m pytest tests/
 
 
 .PHONY: setup test run
